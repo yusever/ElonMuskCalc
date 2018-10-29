@@ -10,6 +10,7 @@ namespace EM.Calc.ConsoleApp
     {
         static void Main(string[] args)
         {
+
         }
     }
 }
