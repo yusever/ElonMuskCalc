@@ -7,22 +7,13 @@ namespace EM.Calc.ConsoleApp
     {
         static void Main(string[] args)
         {
-            /*Console.WriteLine("Введите строку для выполнения, например: sum 2 2 2...");
-            string text = Console.ReadLine();
-            string[] words = text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            int[] numbers = new int[words.Length - 1];
-
-            for (int i = 0; i < numbers.Length; i++)
-            {
-                numbers[i] = Convert.ToInt32(words[i + 1]);
-            }*/
-
-            string[] operations = new[] { "sum", "sub", "pow", "new" };
 
             string operation, operands;
             double[] values;
 
             var calc = new Core.Calc();
+
+            string[] operations = calc.Operations.Select(o => o.Name).ToArray();
 
             if (args.Length == 0)
             {
@@ -47,22 +38,11 @@ namespace EM.Calc.ConsoleApp
                 values = ConvertToDouble(args, 1);
 
             }
-          
-            switch (operation)
-            {
-                /*case ("sum"):
-                    Console.WriteLine("sum = " + calc.Sum(values));
-                    break;
-                case ("sub"):
-                    Console.WriteLine("sub = " + calc.Sub(values));
-                    break;
-                case ("pow"):
-                    Console.WriteLine("pow = " + calc.Pow(values));
-                    break;*/
-                case ("new"):
-                    Console.WriteLine(calc.New(values));
-                    break;
-            }
+
+            var result = calc.Execute(operation, values);
+
+            Console.WriteLine(result);
+            
             Console.ReadKey();
         }
 

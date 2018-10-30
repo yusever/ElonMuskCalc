@@ -5,14 +5,43 @@ namespace EM.Calc.Core
 {
     public class Calc
     {
-        public int Sum(int[] args)
+        /// <summary>
+        /// Операции
+        /// </summary>
+        public IOperation[] Operations { get; set; }
+
+        public Calc()
+        {
+            Operations = new IOperation[]
+                {
+                    new SumOperation(),
+                    new NewOperation()
+                };
+        }
+
+        public double? Execute(string operName, double[] values)
+        {
+            foreach (var item in Operations)
+            {
+                if (item.Name == operName)
+                {
+                    item.Operands = values;
+                    item.Execute();
+                    return item.Result;
+                }
+            }
+            return null;
+        }
+
+        //[Obsolete("Не используйте это, есть Execute")]
+        public double Sum(double[] args)
         {
             return args.Sum();
         }
 
-        public int Sub(int[] args)
+        public double Sub(double[] args)
         {
-            int res = args[0] - args[1];
+            double res = args[0] - args[1];
             for (int i = 2; i < args.Length; i++)
             {
                 res = res - args[i];
@@ -20,14 +49,19 @@ namespace EM.Calc.Core
             return res;
         }
 
-        public int Pow(int[] args)
+        public double Pow(double[] args)
         {
-            int res = (int)Math.Pow(args[0], args[1]);
+            double res = Math.Pow(args[0], args[1]);
             for (int i = 2; i < args.Length; i++)
             {
-                res = (int)Math.Pow(res, args[i]);
+                res = Math.Pow(res, args[i]);
             }
             return res;
+        }
+
+        public double New(double[] args)
+        {
+            return Double.PositiveInfinity;
         }
     }
 }
