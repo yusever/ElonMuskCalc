@@ -26,9 +26,9 @@ namespace EM.Calc.Core
             for (int i = 0; i < dll_files.Length; i++)
             {
                 var asm = Assembly.Load(dll_files[i]);
-                //asm = Assembly.GetExecutingAssembly();
-
                 var types = asm.GetTypes();
+
+                //var needType = typeof(IOperation);
 
                 //перебираем все классы в сборке
                 foreach (var item in types)
