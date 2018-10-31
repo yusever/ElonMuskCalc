@@ -10,6 +10,7 @@ namespace EM.Calc.WinCalc
         public Form1()
         {
             InitializeComponent();
+            btnExec.Enabled = false;
         }
 
         private Core.Calc Calc { get; set; }
@@ -41,6 +42,21 @@ namespace EM.Calc.WinCalc
             //выводим результат
             //lblResult.Text = string.Format("Result = {0}", result);
             lblResult.Text = $"{result}";
+        }
+
+        private void tbInput_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char number = e.KeyChar;
+
+            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != 8 && e.KeyChar != 32)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void tbInput_TextChanged(object sender, EventArgs e)
+        {
+            btnExec.Enabled = !string.IsNullOrEmpty(tbInput.Text);
         }
     }
 }

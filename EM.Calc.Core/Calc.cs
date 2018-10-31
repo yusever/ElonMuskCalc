@@ -15,17 +15,14 @@ namespace EM.Calc.Core
 
         public Calc()
         {
-            string[] files = Directory.GetFiles(@"E:\Elma\ElonMuskCalc\EM.Calc.ConsoleApp\EM.Calc.ConsoleApp\bin\Debug", "*.dll");
-            string[] dll_files = new string[files.Length];
+            string path = Assembly.GetExecutingAssembly().Location;
 
+            string[] files = Directory.GetFiles(path, "*.dll");
+
+            Operations = new List<IOperation>();
             for (int i = 0; i < files.Length; i++)
             {
-                dll_files[i] = Path.GetFileNameWithoutExtension(files[i]);
-            }
-            Operations = new List<IOperation>();
-            for (int i = 0; i < dll_files.Length; i++)
-            {
-                var asm = Assembly.Load(dll_files[i]);
+                var asm = Assembly.Load(files[i]);
                 var types = asm.GetTypes();
 
                 //var needType = typeof(IOperation);

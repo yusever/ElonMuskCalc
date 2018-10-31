@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calc.cs" />
+    <Compile Include="IExtOperation.cs" />
     <Compile Include="IOperation.cs" />
     <Compile Include="NewOperation.cs" />
     <Compile Include="PowOperation.cs" />
