@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace EM.Calc.Core
 {
@@ -8,15 +11,44 @@ namespace EM.Calc.Core
         /// <summary>
         /// Операции
         /// </summary>
-        public IOperation[] Operations { get; set; }
+        public IList<IOperation> Operations { get; set; }
 
         public Calc()
         {
-            Operations = new IOperation[]
+            string[] files = Directory.GetFiles(@"E:\Elma\ElonMuskCalc\EM.Calc.ConsoleApp\EM.Calc.ConsoleApp\bin\Debug", "*.dll");
+            string[] dll_files = new string[files.Length];
+
+            for (int i = 0; i < files.Length; i++)
+            {
+                dll_files[i] = Path.GetFileNameWithoutExtension(files[i]);
+            }
+            Operations = new List<IOperation>();
+            for (int i = 0; i < dll_files.Length; i++)
+            {
+                var asm = Assembly.Load(dll_files[i]);
+                //asm = Assembly.GetExecutingAssembly();
+
+                var types = asm.GetTypes();
+
+                //перебираем все классы в сборке
+                foreach (var item in types)
                 {
-                    new SumOperation(),
-                    new NewOperation()
-                };
+                    //если класс реализует заданный интерфейс
+                    if (item.GetInterface("IOperation") != null)
+                    {
+                        //добавляем в операции экземпляр данного класса
+                        var instance = Activator.CreateInstance(item);
+
+                        var operation = instance as IOperation;
+
+                        if (operation != null)
+                        {
+                            Operations.Add((IOperation)instance);
+                        }
+                    }
+                }
+            }
+
         }
 
         public double? Execute(string operName, double[] values)
@@ -33,12 +65,14 @@ namespace EM.Calc.Core
             return null;
         }
 
-        //[Obsolete("Не используйте это, есть Execute")]
+        #region Old Metods
+        [Obsolete("Вместо этого следует использовать Execute()")]
         public double Sum(double[] args)
         {
             return args.Sum();
         }
 
+        [Obsolete("Вместо этого следует использовать Execute()")]
         public double Sub(double[] args)
         {
             double res = args[0] - args[1];
@@ -49,6 +83,7 @@ namespace EM.Calc.Core
             return res;
         }
 
+        [Obsolete("Вместо этого следует использовать Execute()")]
         public double Pow(double[] args)
         {
             double res = Math.Pow(args[0], args[1]);
@@ -59,9 +94,11 @@ namespace EM.Calc.Core
             return res;
         }
 
+        [Obsolete("Вместо этого следует использовать Execute()")]
         public double New(double[] args)
         {
             return Double.PositiveInfinity;
         }
+        #endregion
     }
 }

@@ -1,10 +1,14 @@
-﻿using System;
+﻿using EM.Calc.Core;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EM.Calc.ConsoleApp
 {
     class Program
     {
+        public static IList<IOperation> Operations { get; set; }
+
         static void Main(string[] args)
         {
 
@@ -12,6 +16,11 @@ namespace EM.Calc.ConsoleApp
             double[] values;
 
             var calc = new Core.Calc();
+
+            // найти файл с операцией
+            // загрузить этот файл
+            // найти в нем операцию
+            // добавить операцию в калькулятор
 
             string[] operations = calc.Operations.Select(o => o.Name).ToArray();
 
@@ -36,13 +45,12 @@ namespace EM.Calc.ConsoleApp
             {
                 operation = args[0].ToLower();
                 values = ConvertToDouble(args, 1);
-
             }
 
             var result = calc.Execute(operation, values);
 
             Console.WriteLine(result);
-            
+
             Console.ReadKey();
         }
 
