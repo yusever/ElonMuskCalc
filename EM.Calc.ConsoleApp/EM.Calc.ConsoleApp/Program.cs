@@ -1,61 +1,66 @@
-﻿using System;
+﻿using EM.Calc.Core;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EM.Calc.ConsoleApp
 {
     class Program
     {
+        public static IList<IOperation> Operations { get; set; }
+
         static void Main(string[] args)
         {
-            Console.WriteLine("Введите строку для выполнения, например: sum 2 2 2...");
-            string text = Console.ReadLine();
-            string[] words = text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            int[] numbers = new int[words.Length - 1];
 
-            for (int i = 0; i < numbers.Length; i++)
+            string operation, operands;
+            double[] values;
+
+            var calc = new Core.Calc();
+
+            // найти файл с операцией
+            // загрузить этот файл
+            // найти в нем операцию
+            // добавить операцию в калькулятор
+
+            string[] operations = calc.Operations.Select(o => o.Name).ToArray();
+
+            if (args.Length == 0)
             {
-                numbers[i] = Convert.ToInt32(words[i + 1]);
+                Console.WriteLine("Список операций: ");
+
+                foreach (var item in operations)
+                {
+                    Console.WriteLine(item);
+                }
+
+                Console.WriteLine("Введите операцию ");
+                operation = Console.ReadLine();
+
+                Console.WriteLine("Введите операнды: ");
+                operands = Console.ReadLine();
+                values = ConvertToDouble(operands.Split(new[] { " ", ";" }, StringSplitOptions.RemoveEmptyEntries));
             }
 
-            string operation = words[0];
-            switch (operation)
+            else
             {
-                case ("sum"):
-                    Console.WriteLine("sum = " + Sum(numbers));
-                    break;
-                case ("sub"):
-                    Console.WriteLine("sub = " + Sub(numbers));
-                    break;
-                case ("pow"):
-                    Console.WriteLine("pow = " + Pow(numbers));
-                    break;
+                operation = args[0].ToLower();
+                values = ConvertToDouble(args, 1);
             }
+
+            var result = calc.Execute(operation, values);
+
+            Console.WriteLine(result);
+
             Console.ReadKey();
         }
 
-        public static int Sum(int[] args)
+        private static double[] ConvertToDouble(string[] args, int start = 0)
         {
-            return args.Sum();
-        }
-
-        public static int Sub(int[] args)
-        {
-            int res = args[0] - args[1];
-            for (int i = 2; i < args.Length; i++)
-            {
-                res = res - args[i];
-            }
-            return res;
-        }
-
-        public static int Pow(int[] args)
-        {
-            int res = (int)Math.Pow(args[0], args[1]);
-            for (int i = 2; i < args.Length; i++)
-            {
-                res = (int)Math.Pow(res, args[i]);
-            }
-            return res;
+            return args
+                .ToList()
+                .Skip(start)
+                .Select(Convert.ToDouble)
+                .ToArray();
         }
     }
 }
