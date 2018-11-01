@@ -2,6 +2,7 @@
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using EM.Calc.Core;
 
 namespace EM.Calc.WinCalc
 {
@@ -57,6 +58,20 @@ namespace EM.Calc.WinCalc
         private void tbInput_TextChanged(object sender, EventArgs e)
         {
             btnExec.Enabled = !string.IsNullOrEmpty(tbInput.Text);
+        }
+
+        private void cbOperation_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var operation = Calc.Operations
+                .OfType<IExtOperation>()
+                .FirstOrDefault(o => o.Name == cbOperation.Text)
+                ;
+
+            if (operation != null)
+            {
+                toolTip1.SetToolTip(cbOperation, operation.Description);
+            }
+            else toolTip1.SetToolTip(cbOperation, "Это старая операция");
         }
     }
 }

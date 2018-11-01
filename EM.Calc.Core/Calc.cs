@@ -25,13 +25,14 @@ namespace EM.Calc.Core
                 var asm = Assembly.Load(files[i]);
                 var types = asm.GetTypes();
 
-                //var needType = typeof(IOperation);
+                var needType = typeof(IOperation);
 
                 //перебираем все классы в сборке
-                foreach (var item in types)
+                foreach (var item in types.Where(t => t.IsClass && t.IsAbstract ))
                 {
+                    var interfaces = item.GetInterfaces();
                     //если класс реализует заданный интерфейс
-                    if (item.GetInterface("IOperation") != null)
+                    if (interfaces.Contains(needType))
                     {
                         //добавляем в операции экземпляр данного класса
                         var instance = Activator.CreateInstance(item);

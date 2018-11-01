@@ -1,15 +1,22 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace EM.Calc.Core
 
 {
-    public class SubOperation : IOperation
+    public class SubOperation : IExtOperation
     {
         public string Name => "sub";
 
         public double[] Operands { get; set; }
 
         public double? Result { get; private set; }
+
+        public Guid Uid => new Guid("{83B60C76-4E36-4307-9C23-7CEABF7C9A08}");
+
+        public string Description => "Вычитает";
+
+        public int? ArgCount => 2;
 
         public double? Execute()
         {
