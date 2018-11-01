@@ -5,7 +5,7 @@ namespace EM.Calc.Core
     /// <summary>
     /// Расширенная операция
     /// </summary>
-    public interface IExtOperation
+    public interface IExtOperation : IOperation
     {
         /// <summary>
         /// Уникальный идентификатор
