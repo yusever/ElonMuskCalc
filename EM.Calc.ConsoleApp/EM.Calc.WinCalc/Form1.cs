@@ -42,14 +42,15 @@ namespace EM.Calc.WinCalc
 
             //выводим результат
             //lblResult.Text = string.Format("Result = {0}", result);
-            lblResult.Text = $"{result}";
+            lblResult.Text = "Результат: " + $"{result}";
         }
 
         private void tbInput_KeyPress(object sender, KeyPressEventArgs e)
         {
             char number = e.KeyChar;
+            var mas = new[] { '-', ',', 8, 13, 32 };
 
-            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != 8 && e.KeyChar != 32)
+            if (!char.IsDigit(e.KeyChar) && !mas.Contains(number))
             {
                 e.Handled = true;
             }
@@ -62,7 +63,7 @@ namespace EM.Calc.WinCalc
 
         private void cbOperation_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var operation = Calc.Operations
+            /*var operation = Calc.Operations
                 .OfType<IExtOperation>()
                 .FirstOrDefault(o => o.Name == cbOperation.Text)
                 ;
@@ -71,7 +72,7 @@ namespace EM.Calc.WinCalc
             {
                 toolTip1.SetToolTip(cbOperation, operation.Description);
             }
-            else toolTip1.SetToolTip(cbOperation, "Это старая операция");
+            else toolTip1.SetToolTip(cbOperation, "Это старая операция");*/
         }
     }
 }

@@ -15,38 +15,42 @@ namespace EM.Calc.Core
 
         public Calc()
         {
-            string path = Assembly.GetExecutingAssembly().Location;
-
-            string[] files = Directory.GetFiles(path, "*.dll");
-
             Operations = new List<IOperation>();
-            for (int i = 0; i < files.Length; i++)
+
+            var path = Environment.CurrentDirectory;
+
+            var dllFiles = Directory.GetFiles(path, "*.dll", SearchOption.AllDirectories);
+            foreach (var file in dllFiles)
             {
-                var asm = Assembly.Load(files[i]);
-                var types = asm.GetTypes();
+                LoadOperations(Assembly.LoadFrom(file));
+            }
+        }
 
-                var needType = typeof(IOperation);
+        private void LoadOperations(Assembly assembly)
+        {
+            // загрузить все типы из сборки
+            var types = assembly.GetTypes();
 
-                //перебираем все классы в сборке
-                foreach (var item in types.Where(t => t.IsClass && t.IsAbstract ))
+            var needType = typeof(IOperation);
+
+            // перебираем все классы в сборке
+            foreach (var item in types.Where(t => t.IsClass && !t.IsAbstract))
+            {
+                var interfaces = item.GetInterfaces();
+
+                // если класс реализаует заданный интерфейс
+                if (interfaces.Contains(needType))
                 {
-                    var interfaces = item.GetInterfaces();
-                    //если класс реализует заданный интерфейс
-                    if (interfaces.Contains(needType))
+                    //добавляем в операции экземпляр данного класса
+                    var instance = Activator.CreateInstance(item);
+
+                    var operation = instance as IOperation;
+                    if (operation != null)
                     {
-                        //добавляем в операции экземпляр данного класса
-                        var instance = Activator.CreateInstance(item);
-
-                        var operation = instance as IOperation;
-
-                        if (operation != null)
-                        {
-                            Operations.Add((IOperation)instance);
-                        }
+                        Operations.Add(operation);
                     }
                 }
             }
-
         }
 
         public double? Execute(string operName, double[] values)

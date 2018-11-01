@@ -16,7 +16,7 @@ namespace EM.Calc.Core
 
         public Guid Uid => new Guid("{7E33DEEC-A655-47B6-B3B6-B8ABF3AA5A70}");
 
-        public string Description => "Ворзвращает позитив";
+        public string Description => "Возвращает позитив";
 
         public int? ArgCount => 0;
 

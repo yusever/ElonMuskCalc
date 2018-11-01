@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EM.Calc.Core", "..\EM.Calc.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EM.Calc.WinCalc", "EM.Calc.WinCalc\EM.Calc.WinCalc.csproj", "{0534AFFB-AC23-405F-8C08-779407AADE26}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EM.Calc.Web", "EM.Calc.Web\EM.Calc.Web.csproj", "{5442E758-7408-4878-8B67-BAECC4A8BB22}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{0534AFFB-AC23-405F-8C08-779407AADE26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0534AFFB-AC23-405F-8C08-779407AADE26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0534AFFB-AC23-405F-8C08-779407AADE26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5442E758-7408-4878-8B67-BAECC4A8BB22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5442E758-7408-4878-8B67-BAECC4A8BB22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5442E758-7408-4878-8B67-BAECC4A8BB22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5442E758-7408-4878-8B67-BAECC4A8BB22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
