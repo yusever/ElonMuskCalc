@@ -1,0 +1,34 @@
+CREATE TABLE [dbo].[OperationResult]
+(
+    [Id] INT NOT NULL PRIMARY KEY IDENTITY,
+    [OperationId] INT NOT NULL,
+    [Result] INT NOT NULL, 
+    [Args] CHAR(10) NOT NULL, 
+    [CreationDate] DATETIME NOT NULL, 
+    [Status] NCHAR(20) NULL, 
+    [UserId] INT NOT NULL,
+    [ExecTime] TIME NOT NULL,
+    FOREIGN KEY (OperationId) REFERENCES Operation(Id), 
+    FOREIGN KEY ([UserId]) REFERENCES [User]([Id])
+
+CREATE TABLE [dbo].[Operation]
+(
+    [Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [Name] NCHAR(20) NOT NULL, 
+    [Rating] FLOAT NULL, 
+    [ArgCount] INT NOT NULL, 
+    [Owner] NCHAR(50) NULL
+)
+
+CREATE TABLE [dbo].[User]
+(
+    [Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [Login] NVARCHAR(20) NOT NULL, 
+    [Password] INT NOT NULL, 
+    [Roles] NVARCHAR(10) NOT NULL, 
+    [Email] NVARCHAR(30) NOT NULL, 
+    [BirthDay] DATE NOT NULL, 
+    [Status] NVARCHAR(15) NOT NULL, 
+    [Company] NVARCHAR(50) NOT NULL, 
+    [Sex] NVARCHAR(10) NOT NULL
+)

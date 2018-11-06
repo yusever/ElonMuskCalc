@@ -6,7 +6,7 @@
         .Select(o => new SelectListItem() { Text = o.Name, Value = o.Name });
 }
 
-<h2>Давайте посчитаем!</h2>
+<h2>Давайте посчитаем</h2>
 
 @using (Html.BeginForm("Input", "Calc", FormMethod.Post, new { id = "calcForm" }))
 {
@@ -38,14 +38,14 @@
             <div class="col-md-offset-2 col-md-10">
                 @Helpers.Submit("Вычислить")
                 @Helpers.Button("Вычислить", "AsyncCalc()")
-                @Html.SuperButton()
-                @Html.Partial("Now")
+                @*@Html.SuperButton()
+                @Html.Partial("Now")*@
             </div>
         </div>
     </div>
 }
 
-<div id="result">
+<div id="result" class="alert-success">
 </div>
 
 
@@ -57,6 +57,7 @@
             cache: false,
             data: $("#calcForm").serializeArray(),
             success: function (result) {
+                alert('Точно?');
                 $("#result").html(result)
             }
         });
