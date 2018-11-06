@@ -26,7 +26,7 @@ namespace EM.Calc.Web.Controllers
         {
             var model = new InputModel
             {
-                Operations = calc.Operations
+            Operations = calc.Operations
             };
 
             return View(model);
