@@ -17,7 +17,6 @@ namespace EM.Calc.Web.Controllers
         public ActionResult Execute(string oper, double[] args)
         {
             var model = Calc(oper, args);
-
             return View(model);
         }
 
