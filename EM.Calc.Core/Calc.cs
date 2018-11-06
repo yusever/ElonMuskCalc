@@ -6,101 +6,118 @@ using System.Reflection;
 
 namespace EM.Calc.Core
 {
-    public class Calc
-    {
-        /// <summary>
-        /// Операции
-        /// </summary>
-        public IList<IOperation> Operations { get; set; }
-
-        public Calc()
+    
+        public class Calc
         {
-            Operations = new List<IOperation>();
+            /// <summary>
+            /// Операции
+            /// </summary>
+            public IList<IOperation> Operations { get; set; }
 
-            var path = Environment.CurrentDirectory;
-
-            var dllFiles = Directory.GetFiles(path, "*.dll", SearchOption.AllDirectories);
-            foreach (var file in dllFiles)
+            public Calc() : this("")
             {
-                LoadOperations(Assembly.LoadFrom(file));
             }
-        }
 
-        private void LoadOperations(Assembly assembly)
-        {
-            // загрузить все типы из сборки
-            var types = assembly.GetTypes();
-
-            var needType = typeof(IOperation);
-
-            // перебираем все классы в сборке
-            foreach (var item in types.Where(t => t.IsClass && !t.IsAbstract))
+            /// <summary>
+            /// Конструктор
+            /// </summary>
+            /// <param name="path">Путь до сторонних библиотек с операциями</param>
+            public Calc(string path)
             {
-                var interfaces = item.GetInterfaces();
+                Operations = new List<IOperation>();
 
-                // если класс реализаует заданный интерфейс
-                if (interfaces.Contains(needType))
+                if (string.IsNullOrWhiteSpace(path))
                 {
-                    //добавляем в операции экземпляр данного класса
-                    var instance = Activator.CreateInstance(item);
+                    path = Environment.CurrentDirectory;
+                }
+                else
+                {
+                LoadOperations(Assembly.GetExecutingAssembly());
+                }
 
-                    var operation = instance as IOperation;
-                    if (operation != null)
+                var dllFiles = Directory.GetFiles(path, "*.dll", SearchOption.AllDirectories);
+                foreach (var file in dllFiles)
+                {
+                    LoadOperations(Assembly.LoadFrom(file));
+                }
+            }
+
+            private void LoadOperations(Assembly assembly)
+            {
+                // загрузить все типы из сборки
+                var types = assembly.GetTypes();
+
+                var needType = typeof(IOperation);
+
+                // перебираем все классы в сборке
+                foreach (var item in types.Where(t => t.IsClass && !t.IsAbstract))
+                {
+                    var interfaces = item.GetInterfaces();
+
+                    // если класс реализаует заданный интерфейс
+                    if (interfaces.Contains(needType))
                     {
-                        Operations.Add(operation);
+                        //добавляем в операции экземпляр данного класса
+                        var instance = Activator.CreateInstance(item);
+
+                        var operation = instance as IOperation;
+                        if (operation != null)
+                        {
+                            Operations.Add(operation);
+                        }
                     }
                 }
             }
-        }
 
-        public double? Execute(string operName, double[] values)
-        {
-            foreach (var item in Operations)
+            public double? Execute(string operName, double[] values)
             {
-                if (item.Name == operName)
+                foreach (var item in Operations)
                 {
-                    item.Operands = values;
-                    item.Execute();
-                    return item.Result;
+                    if (item.Name == operName)
+                    {
+                        item.Operands = values;
+                        item.Execute();
+                        return item.Result;
+                    }
                 }
+                return null;
             }
-            return null;
-        }
 
-        #region Old Metods
-        [Obsolete("Вместо этого следует использовать Execute()")]
-        public double Sum(double[] args)
-        {
-            return args.Sum();
-        }
-
-        [Obsolete("Вместо этого следует использовать Execute()")]
-        public double Sub(double[] args)
-        {
-            double res = args[0] - args[1];
-            for (int i = 2; i < args.Length; i++)
+            #region Old Metods
+            [Obsolete("Вместо этого следует использовать Execute()")]
+            public double Sum(double[] args)
             {
-                res = res - args[i];
+                return args.Sum();
             }
-            return res;
-        }
 
-        [Obsolete("Вместо этого следует использовать Execute()")]
-        public double Pow(double[] args)
-        {
-            double res = Math.Pow(args[0], args[1]);
-            for (int i = 2; i < args.Length; i++)
+            [Obsolete("Вместо этого следует использовать Execute()")]
+            public double Sub(double[] args)
             {
-                res = Math.Pow(res, args[i]);
+                double res = args[0] - args[1];
+                for (int i = 2; i < args.Length; i++)
+                {
+                    res = res - args[i];
+                }
+                return res;
             }
-            return res;
-        }
 
-        [Obsolete("Вместо этого следует использовать Execute()")]
-        public double New(double[] args)
-        {
-            return Double.PositiveInfinity;
+            [Obsolete("Вместо этого следует использовать Execute()")]
+            public double Pow(double[] args)
+            {
+                double res = Math.Pow(args[0], args[1]);
+                for (int i = 2; i < args.Length; i++)
+                {
+                    res = Math.Pow(res, args[i]);
+                }
+                return res;
+            }
+
+            [Obsolete("Вместо этого следует использовать Execute()")]
+            public double New(double[] args)
+            {
+                return Double.PositiveInfinity;
+            }
+            #endregion
         }
-        #endregion
     }
-}
+

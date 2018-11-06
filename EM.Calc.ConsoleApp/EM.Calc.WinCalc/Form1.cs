@@ -63,7 +63,7 @@ namespace EM.Calc.WinCalc
 
         private void cbOperation_SelectedIndexChanged(object sender, EventArgs e)
         {
-            /*var operation = Calc.Operations
+            var operation = Calc.Operations
                 .OfType<IExtOperation>()
                 .FirstOrDefault(o => o.Name == cbOperation.Text)
                 ;
@@ -72,7 +72,7 @@ namespace EM.Calc.WinCalc
             {
                 toolTip1.SetToolTip(cbOperation, operation.Description);
             }
-            else toolTip1.SetToolTip(cbOperation, "Это старая операция");*/
+            else toolTip1.SetToolTip(cbOperation, "Это старая операция");
         }
     }
 }

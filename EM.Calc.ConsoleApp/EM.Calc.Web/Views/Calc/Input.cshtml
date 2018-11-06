@@ -1,0 +1,65 @@
+﻿@model EM.Calc.Web.Models.InputModel
+@using EM.Calc.Web.Extentions
+@{
+    ViewBag.Title = "Input";
+    var operations = Model.Operations
+        .Select(o => new SelectListItem() { Text = o.Name, Value = o.Name });
+}
+
+<h2>Давайте посчитаем!</h2>
+
+@using (Html.BeginForm("Input", "Calc", FormMethod.Post, new { id = "calcForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.Name, operations, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Args1, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+                @Html.EditorFor(model => model.Args1, "doubles")
+
+                @Html.ValidationMessageFor(model => model.Args1, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @Helpers.Submit("Вычислить")
+                @Helpers.Button("Вычислить", "AsyncCalc()")
+                @Html.SuperButton()
+                @Html.Partial("Now")
+            </div>
+        </div>
+    </div>
+}
+
+<div id="result">
+</div>
+
+
+<script>
+    function AsyncCalc() {
+        $.ajax({
+            url: '@Url.Action("Input", "Calc")',
+            type: 'POST',
+            cache: false,
+            data: $("#calcForm").serializeArray(),
+            success: function (result) {
+                $("#result").html(result)
+            }
+        });
+    }
+</script>
+
