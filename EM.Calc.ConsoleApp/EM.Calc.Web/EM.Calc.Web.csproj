@@ -149,6 +149,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CalcController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OperationResultController.cs" />
+    <Compile Include="DB\DBHelper.cs" />
     <Compile Include="Extentions\Helpers.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -206,6 +208,7 @@
     <Content Include="Views\Calc\Input.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\doubles.cshtml" />
     <Content Include="Views\Shared\Now.cshtml" />
+    <Content Include="Views\OperationResult\IndexOperationResult.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -225,6 +228,10 @@
     <ProjectReference Include="..\..\EM.Calc.Core\EM.Calc.Core.csproj">
       <Project>{440fb43e-9abb-4f1a-bd38-a1dbe7f4004b}</Project>
       <Name>EM.Calc.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EM.Calc.DB\EM.Calc.DB.csproj">
+      <Project>{34EEC0CC-4234-48AB-9711-04F7703DF30A}</Project>
+      <Name>EM.Calc.DB</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
