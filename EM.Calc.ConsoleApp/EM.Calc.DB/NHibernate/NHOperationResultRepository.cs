@@ -1,47 +1,33 @@
 ﻿using System.Collections.Generic;
-using NHibernate;
-using NHibernate.Criterion;
 
 namespace EM.Calc.DB
 {
-    public class NHOperationResultRepository : IEntityRepository<OperationResult>
+    public class NHOperationResultRepository : NHBaseRepository<OperationResult>, IOperationResultRepository
     {
-        public OperationResult Create()
+        public IEnumerable<OperationResult> LoadByOperation(Operation operation)
         {
-            throw new System.NotImplementedException();
-        }
+            var session = NHibernateHelper.GetCurrentSession();
 
-        public void Delete(long id)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public IEnumerable<OperationResult> GetAll()
-        {
-            ISession session = NHibernateHelper.GetCurrentSession();
-
-            var list = session.CreateCriteria<OperationResult>()
-                .List<OperationResult>();
+            var entities = session.QueryOver<OperationResult>()
+                .And(o => o.Operation == operation)
+                .List();
 
             NHibernateHelper.CloseSession();
 
-            return list;
+            return entities;
         }
 
-        public OperationResult Load(long id)
+        public IEnumerable<OperationResult> LoadByUser(User user)
         {
-            ISession session = NHibernateHelper.GetCurrentSession();
+            var session = NHibernateHelper.GetCurrentSession();
 
-            var entity = session.Load<OperationResult>(id);
+            var entities = session.QueryOver<OperationResult>()
+                .And(o => o.User == user)
+                .List();
 
             NHibernateHelper.CloseSession();
 
-            return entity;
-        }
-
-        public void Save(OperationResult entity)
-        {
-            throw new System.NotImplementedException();
+            return entities;
         }
     }
 }

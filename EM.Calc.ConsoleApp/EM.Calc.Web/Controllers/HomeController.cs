@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using EM.Calc.DB;
-using EM.Calc.Web.DB;
 
 namespace EM.Calc.Web.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
-        IEntityRepository<User> UserRepository;
+        IUserRepository UserRepository;
 
         public HomeController()
         {
@@ -19,7 +15,6 @@ namespace EM.Calc.Web.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.Results = UserRepository.Load(1);
             return View();
         }
 
@@ -33,6 +28,7 @@ namespace EM.Calc.Web.Controllers
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
+
             return View();
         }
     }

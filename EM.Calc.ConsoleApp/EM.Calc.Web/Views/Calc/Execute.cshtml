@@ -3,4 +3,12 @@
 @{
     Layout = null;
 }
-@Model.Result
+@Html.ValidationSummary(false, "", new { @class = "text-danger" })
+@if (!string.IsNullOrWhiteSpace(Model.Error))
+{
+    <b style="color:red;font-size:300%;">@Model.Error</b>
+}
+else
+{
+    @Model.Result
+}

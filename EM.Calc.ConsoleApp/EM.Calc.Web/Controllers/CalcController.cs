@@ -1,22 +1,25 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using EM.Calc.Web.Models;
 
 namespace EM.Calc.Web.Controllers
 {
+    [Authorize]
     public class CalcController : Controller
     {
         private Core.Calc calc;
-        string connString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=E:\Elma\ElonMuskCalc\EM.Calc.ConsoleApp\EM.Calc.Web\App_Data\ElonMusk.mdf;Integrated Security=True";
 
-        EM.Calc.DB.OperationResultRepository OperationResultRepository;
+        EM.Calc.DB.IOperationResultRepository OperationResultRepository;
+        EM.Calc.DB.IUserRepository UserRepository;
         EM.Calc.DB.IOperationRepository OperationRepository;
 
         public CalcController()
         {
-            OperationResultRepository = new EM.Calc.DB.OperationResultRepository(connString);
-            OperationRepository = new EM.Calc.DB.OperationRepository(connString);
+            OperationResultRepository = new EM.Calc.DB.NHOperationResultRepository();
+            OperationRepository = new EM.Calc.DB.NHOperationRepository();
+            UserRepository = new EM.Calc.DB.NHUserRepository();
             calc = new Core.Calc(@"E:\temp");
         }
 
@@ -24,6 +27,7 @@ namespace EM.Calc.Web.Controllers
         public ActionResult Execute(string oper, double[] args)
         {
             var model = Calc(oper, args);
+
             return View(model);
         }
 
@@ -34,6 +38,7 @@ namespace EM.Calc.Web.Controllers
             {
                 Operations = calc.Operations
             };
+
             return View(model);
         }
 
@@ -42,31 +47,36 @@ namespace EM.Calc.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return null;
+                return PartialView(model);
             }
 
             if (!calc.Operations.Any(m => m.Name == model.Name))
             {
                 ModelState.AddModelError("", "Такой операции нет");
-                return null;
+                return PartialView(model);
             }
 
             var result = Calc(model.Name, model.Args1);
+
             return PartialView("Execute", result);
         }
 
         private OperationResult Calc(string oper, double[] args)
         {
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
             var result = calc.Execute(oper, args);
+            stopWatch.Stop();
 
             var operation = OperationRepository.LoadByName(oper);
 
+            var user = UserRepository.LoadByName(User.Identity.Name);
+
             OperationResultRepository.Save(new EM.Calc.DB.OperationResult()
             {
-                UserId = 1,
-                ExecTime = new Random().Next(1, 1000),
-
-                OperationId = operation.Id,
+                ExecTime = stopWatch.ElapsedMilliseconds,
+                User = user,
+                Operation = operation,
                 CreationDate = DateTime.Now,
                 Status = EM.Calc.DB.OperationResultStatus.DONE,
                 Result = result ?? double.NaN,
@@ -79,5 +89,6 @@ namespace EM.Calc.Web.Controllers
                 Result = result
             };
         }
+
     }
 }

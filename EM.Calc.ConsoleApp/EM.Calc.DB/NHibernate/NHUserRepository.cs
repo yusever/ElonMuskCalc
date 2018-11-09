@@ -1,42 +1,40 @@
-﻿using System.Collections.Generic;
-using NHibernate;
-using NHibernate.Criterion;
-
-namespace EM.Calc.DB
+﻿namespace EM.Calc.DB
 {
-    public class NHUserRepository : IEntityRepository<User>
+    public class NHUserRepository : NHBaseRepository<User>, IUserRepository
     {
-        public User Create()
+        public override void Delete(long id)
         {
-            throw new System.NotImplementedException();
+            var user = Load(id);
+
+            if (user != null)
+            {
+                user.Status = UserStatus.DELETED;
+                Save(user);
+            }
         }
 
-        public void Delete(long id)
+        public void Block(long id)
         {
-            throw new System.NotImplementedException();
+            var user = Load(id);
+
+            if (user != null)
+            {
+                user.Status = UserStatus.BLOCKED;
+                Save(user);
+            }
         }
 
-        public IEnumerable<User> GetAll()
+        public User LoadByName(string name)
         {
-            throw new System.NotImplementedException();
-        }
+            var session = NHibernateHelper.GetCurrentSession();
 
-        public User Load(long id)
-        {
-            ISession session = NHibernateHelper.GetCurrentSession();
-
-            var user = session.CreateCriteria<User>()
-                .Add(Restrictions.Eq("Id", id))
-                .UniqueResult<User>();
+            var entity = session.QueryOver<User>()
+                .And(u => u.Login == name)
+                .SingleOrDefault();
 
             NHibernateHelper.CloseSession();
 
-            return user;
-        }
-
-        public void Save(User entity)
-        {
-            throw new System.NotImplementedException();
+            return entity;
         }
     }
 }

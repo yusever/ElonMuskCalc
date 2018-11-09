@@ -1,10 +1,9 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title – Илон Маск Калькулятор</title>
+    <title>@ViewBag.Title - Илон Маск Калькулятор</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -19,18 +18,29 @@
                 </button>
                 @Html.ActionLink("Калькулятор", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Рассчитать", "Input", "Calc")</li>
-                </ul>
-            </div>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+
+                        @if (User.IsInRole("admin"))
+                        {
+                            <li>@Html.ActionLink("История", "Index", "OperationResult")</li>
+                        }
+                        <li>@Html.ActionLink("Вычислить", "Input", "Calc")</li>
+
+                        <li>@Html.ActionLink("Выйти (" + @User.Identity.Name + ")", "Logoff", "Account")</li>
+                    </ul>
+                </div>
+            }
         </div>
     </div>
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year – Илон Маск</p>
+            <p>&copy; @DateTime.Now.Year - Илон Маск</p>
         </footer>
     </div>
 

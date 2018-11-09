@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using EM.Calc.DB;
 
 namespace EM.Calc.Web.Controllers
 {
+    [Authorize(Roles = "admin, user")]
     public class OperationResultController : Controller
     {
-        IEntityRepository<OperationResult> OperationResultRepository;
+        IOperationResultRepository OperationResultRepository;
 
         public OperationResultController()
         {

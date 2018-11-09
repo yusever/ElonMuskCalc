@@ -1,41 +1,77 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NHibernate;
-using NHibernate.Criterion;
 
 namespace EM.Calc.DB
 {
     public class NHBaseRepository<T> : IEntityRepository<T> where T : class, IEntity
     {
-        public T Create()
+        public virtual T Create()
         {
-            throw new System.NotImplementedException();
+            return Activator.CreateInstance<T>();
         }
 
-        public void Delete(long id)
+        public virtual void Delete(long id)
         {
-            throw new System.NotImplementedException();
+            var session = NHibernateHelper.GetCurrentSession();
+
+            try
+            {
+                using (var tx = session.BeginTransaction())
+                {
+                    var entity = Load(id);
+
+                    if (entity != null)
+                    {
+                        session.Delete(entity);
+                        tx.Commit();
+                    }
+                }
+            }
+            finally
+            {
+                NHibernateHelper.CloseSession();
+            }
         }
 
-        public IEnumerable<T> GetAll()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public T Load(long id)
+        public virtual IEnumerable<T> GetAll()
         {
             ISession session = NHibernateHelper.GetCurrentSession();
 
-            var result = session.CreateCriteria<T>()
-                .Add(Restrictions.Eq("Id", id))
-                .UniqueResult<T>();
+            var entities = session.CreateCriteria<T>().List<T>();
 
             NHibernateHelper.CloseSession();
-            return result;
+
+            return entities;
         }
 
-        public void Save(T entity)
+        public virtual T Load(long id)
         {
-            throw new System.NotImplementedException();
+            ISession session = NHibernateHelper.GetCurrentSession();
+
+            var user = session.Load<T>(id);
+
+            NHibernateHelper.CloseSession();
+
+            return user;
+        }
+
+        public virtual void Save(T entity)
+        {
+            ISession session = NHibernateHelper.GetCurrentSession();
+
+            try
+            {
+                using (var tx = session.BeginTransaction())
+                {
+                    session.SaveOrUpdate(entity);
+                    tx.Commit();
+                }
+            }
+            finally
+            {
+                NHibernateHelper.CloseSession();
+            }
         }
     }
 }

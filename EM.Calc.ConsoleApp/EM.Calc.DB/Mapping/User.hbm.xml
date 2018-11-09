@@ -9,8 +9,13 @@
     </id>
 
     <property name="Login" />
-    <property name="Sex" />
+    <property name="Password" />
+    <many-to-one name="Role" column="RoleId" lazy="false"/>
+    <property name="Email" />
     <property name="BirthDay" />
+    <property name="Status" />
+    <property name="Company" />
+    <property name="Sex" />
 
   </class>
 

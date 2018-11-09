@@ -7,14 +7,10 @@ namespace EM.Calc.Web.Models
 {
     public class OperationResult
     {
-        /// <summary>
-        /// Наименование
-        /// </summary>
         public string Name { get; set; }
 
-        /// <summary>
-        /// Результат
-        /// </summary>
         public double? Result { get; set; }
+
+        public string Error { get; set; }
     }
 }
