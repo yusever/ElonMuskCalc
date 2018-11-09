@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+    namespace="EM.Calc.DB" assembly="EM.Calc.DB">
+
+  <class name="OperationResult" table="OperationResult">
+
+    <id name="Id">
+      <generator class="native" />
+    </id>
+
+    <property name="Args" />
+    <property name="Result" />
+    <property name="CreationDate" />
+    <property name="Status" />
+    <property name="ExecTime" />
+
+    <many-to-one name="Operation" column="OperationId" lazy="false"/>
+    <many-to-one name="User" column="UserId" lazy="false"/>
+
+  </class>
+
+</hibernate-mapping>

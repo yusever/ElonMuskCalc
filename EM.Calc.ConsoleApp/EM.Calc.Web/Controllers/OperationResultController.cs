@@ -1,26 +1,27 @@
-﻿using EM.Calc.DB;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using EM.Calc.DB;
 
 namespace EM.Calc.Web.Controllers
 {
     public class OperationResultController : Controller
     {
-        string connString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=E:\Elma\ElonMuskCalc\EM.Calc.ConsoleApp\EM.Calc.Web\App_Data\ElonMusk.mdf;Integrated Security=True";
-        OperationResultRepository OperationResultRepository;
+        IEntityRepository<OperationResult> OperationResultRepository;
 
         public OperationResultController()
         {
-            OperationResultRepository = new OperationResultRepository(connString);
+            OperationResultRepository = new NHOperationResultRepository();
         }
 
-        public ActionResult IndexOperationResult()
+        // GET: OperationResult
+        public ActionResult Index()
         {
-            ViewBag.Result = OperationResultRepository.Load(4);
-            return View();
+            var all = OperationResultRepository.GetAll();
+
+            return View(all);
         }
     }
 }

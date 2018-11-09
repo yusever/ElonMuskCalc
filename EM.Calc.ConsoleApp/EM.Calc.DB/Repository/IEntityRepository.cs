@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace EM.Calc.DB
 {
-    public interface IEntityRepository<T> where T: class, IEntity
+    public interface IEntityRepository<T> where T : class, IEntity
     {
         T Create();
 
         T Load(long id);
 
-        void Update(T entity);
+        void Save(T entity);
 
         void Delete(long id);
 

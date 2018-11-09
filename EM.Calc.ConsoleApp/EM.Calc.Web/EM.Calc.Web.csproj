@@ -214,7 +214,7 @@
     <Content Include="Views\Calc\Input.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\doubles.cshtml" />
     <Content Include="Views\Shared\Now.cshtml" />
-    <Content Include="Views\OperationResult\IndexOperationResult.cshtml" />
+    <Content Include="Views\OperationResult\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
